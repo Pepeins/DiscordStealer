@@ -448,3 +448,6 @@ curl -s -X POST -H "Content-Type: application/json" -d @"%_notifFile%" %WEBHOOK_
 
 timeout /t 90 /nobreak >nul
 goto loopMain
+
+
+:: this is just a test, I really don't know if it's going
